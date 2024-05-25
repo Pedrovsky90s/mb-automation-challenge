@@ -1,64 +1,87 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-import 'cypress-iframe';
+const homePage = require ('../pageObject/HomePage');
+const details = require('../fixtures/contactDetails');
 
-    Cypress.Commands.add('setLocalStorage', (key, value) => {
-  cy.window().then((win) => {
-    win.localStorage.setItem(key, value);
-  });
-});
 
-Cypress.Commands.add(`visitWithRetry`, (url) => {
-    cy.request(url);
+Cypress.Commands.add('fillLocationPopup', (location, postalCodePart1, postalCodePart2, type) => {
+  cy.get(homePage.locationPopupModal()).within(()=> {
+          cy.get('select').select(location)
+
+          cy.get(homePage.postalCodeInput()).type(postalCodePart1)
+          cy.get(homePage.postalInputValidationError())
+              .should('be.visible')
+              .and('have.text',' Please enter a valid Postal Code. ')
+              .then(($error)=> {
+                  if (!$error.is(':visible'))  {
+                      throw new Error ('Field input validation is not visible!')
+                  }
+              });
+          cy.get(homePage.postalCodeInput()).type(postalCodePart2)
+
+          cy.get(homePage.radioPurposePrivate(type)).check({force:true})
+          cy.get(homePage.locationPopupModalContinueButton()).click({force: true})
+    })
+  })
+
+Cypress.Commands.add('saveCarInfo', () => {
+   const carDetails = {}
+              cy.get('[data-test-id="dcp-vehicle-details-list-item-3"]').should('contain', 'Model Year ')
+              cy.get('[data-test-id="dcp-vehicle-details-list-item-3"] .dcp-vehicle-details-list-item__value')
+                      .invoke('text')
+                      .then((year) => {
+                          carDetails.year = year.trim()
+
+                          cy.get('[data-test-id="dcp-vehicle-details-list-item-11"]').should('contain', 'VIN ')
+                          cy.get('[data-test-id="dcp-vehicle-details-list-item-11"] .dcp-vehicle-details-list-item__value')
+                                              .invoke('text')
+                                              .then((vin) => {
+                                                  carDetails.vin = vin.trim()
+
+                                                  cy.writeFile('cypress/fixtures/carDetails.json', carDetails).then(()=>{
+                                                      cy.log('File written successfully')
+                                                  })
+                                              })
+                      })
+})
+
+Cypress.Commands.add('findMostExpensiveCar', () => {
+
+    let highestPrice = -1
+    let highestPriceElement
+
+    cy.get('[data-test-id="dcp-cars-product-tile-price"]').each(($el) => {
+
+        //wraps raw Dom element in order to use Cypress command
+
+            cy.wrap($el).invoke('text').then((text)=> {
+                //trim whitespaces
+                const priceString= text.trim()
+                console.log({text, priceString})
+
+                //extract number from string
+                const getTheNumberString = priceString.split('$')[1].replace(/,/g,'');
+                console.log({getTheNumberString})
+
+                //Convert string to Integer
+                const price = parseInt(getTheNumberString, 10);
+                console.log({price})
+
+                //Compares prices
+                if (price > highestPrice) {
+                    highestPrice = price;
+                    highestPriceElement = $el
+                }
+            })
+
+        }).then(() => {
+             console.log({highestPrice});
+             cy.get(highestPriceElement).click();
+         });
+    });
+
+Cypress.Commands.add('visitWithRetry', (url) => {
+    cy.request(url)
     cy.visit(url, {
         retryOnStatusCodeFailure: true,
         retryOnNetworkFailure: true,
     });
 });
-
-Cypress.Commands.add('findCheapestMoisturizerWith', (name) =>{
-  cy.get(`button[onclick]`).then($moisturizer => {
-        let cheapestPrice = Number.MAX_VALUE
-        let cheapestIndex = -1
-
-        $moisturizer.each((index, $moisturizer) =>{
-            const onClickAttribute = $moisturizer.getAttribute('onclick')
-            const regex = new RegExp(name, 'i')
-
-            if (regex.test(onClickAttribute)) {
-                const price = parseInt(onClickAttribute.match(/\d+/)[0])
-
-                if (price<cheapestPrice) {
-                    cheapestPrice = price
-                    cheapestIndex = index
-                }
-            }
-        })
-        if (cheapestIndex !== -1) {
-            cy.wrap($moisturizer[cheapestIndex]).click()
-        }
-    })
-})
