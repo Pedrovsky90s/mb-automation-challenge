@@ -4,7 +4,7 @@ const details = require('../fixtures/contactDetails');
 
 Cypress.Commands.add('fillLocationPopup', (location, postalCodePart1, postalCodePart2, type) => {
   cy.get(homePage.locationPopupModal()).within(()=> {
-          cy.get('select').select(location)
+          cy.get('select').select(location, {force:true})
 
           cy.get(homePage.postalCodeInput()).type(postalCodePart1)
           cy.get(homePage.postalInputValidationError())
