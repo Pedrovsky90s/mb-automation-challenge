@@ -1,4 +1,4 @@
-const homePage = require ('../pageObject/HomePage');
+const homePage = require ('../pageObject/homePage');
 const details = require('../fixtures/contactDetails');
 
 
