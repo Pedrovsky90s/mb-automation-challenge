@@ -15,19 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@2
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        uses: npm install
-
       - name: Cypress run
         uses: cypress-io/github-action@v6
 
         with: 
-          #build: npm run build
+          build: npm run build
           start: npm start
           wait-on: http://localhost:3000
           browser: chrome
