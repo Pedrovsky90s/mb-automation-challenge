@@ -52,6 +52,7 @@ class HomePage {
                 return cy.get('cmm-cookie-banner[settings-id="Kvbnw4-6_"]')
                                .shadow()
                                .find(this.cookieButtonsWrapper())
+                               .should('be.visible')
                                .find(this.acceptAllCookiesButton()).click({force: true})
             }
 }

@@ -53,4 +53,10 @@ jobs:
         if: failure() && matrix.attempt != '2'
         run: echo "Attempt ${{ matrix.attempt }} failed, retrying..."
 
+      - name: Final check
+        if: failure() && matrix.attempt == '2'
+        run: |
+          echo  "All attempts failed"
+          exit 1
+
 

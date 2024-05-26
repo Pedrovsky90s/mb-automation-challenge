@@ -4,9 +4,9 @@ const details = require('../fixtures/contactDetails');
 
 Cypress.Commands.add('fillLocationPopup', (location, postalCodePart1, postalCodePart2, type) => {
   cy.get(homePage.locationPopupModal()).within(()=> {
-          cy.get('select').select(location, {force:true}) //TODO: remove force:true and make the test more robust
+          cy.get('select').select(location, {force:true}) //TODO: Validate possibility of removing all force:true on project
 
-          cy.get(homePage.postalCodeInput(),{force:true}).type(postalCodePart1) //TODO: remove force:true and make the test more robust
+          cy.get(homePage.postalCodeInput()).type(postalCodePart1)
           cy.get(homePage.postalInputValidationError())
               .should('be.visible')
               .and('have.text',' Please enter a valid Postal Code. ')
@@ -18,7 +18,7 @@ Cypress.Commands.add('fillLocationPopup', (location, postalCodePart1, postalCode
           cy.get(homePage.postalCodeInput()).type(postalCodePart2)
 
           cy.get(homePage.radioPurposePrivate(type)).check({force:true})
-          cy.get(homePage.locationPopupModalContinueButton()).click({force: true}) //TODO: remove force:true and make the test more robust
+          cy.get(homePage.locationPopupModalContinueButton()).click({force: true})
     })
   })
 
