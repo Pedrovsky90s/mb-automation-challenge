@@ -1,6 +1,6 @@
 const details = require('../fixtures/contactDetails');
-const homePage = require ('../pageObject/HomePage')
-const filterPage = require('../pageObject/FiltersPage')
+const homePage = require ('../pageObject/homePage')
+const filterPage = require('../pageObject/filtersPage')
 const contactDetailsScreen= require('../pageObject/contactDetailsScreen')
 
 describe('Validate the negative path of enquiring the highest price at Mercedes-Benz', () => {
