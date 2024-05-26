@@ -57,3 +57,13 @@ npm run cy:open
 - Tap on "code_challenge.cy.js" to run
 - Pray to the testing gods it passes and you should be fine :D
 
+
+### Automated pipeline
+
+I've used Github Actions to make a simple workflow that will:
+ - Run the tests twice in case the first one fails
+ - Is triggered either when there is a push to main
+ - Has a cronjob that runs it once a week on Mondays 2:00 UCT
+
+*Note:* There are some things to improve but keep in mind this was my first time applying an automated pipeline solution. 
+
