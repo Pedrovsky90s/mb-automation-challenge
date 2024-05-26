@@ -1,7 +1,7 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
-  projectId: 't35o7y',
+  projectId: 'a95rkj',
   e2e: {
     chromeWebSecurity: false,
     baseUrl: 'https://shop.mercedes-benz.com/en-au/shop/vehicle/srp/',
