@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        attempt: [1,2,3,4]
+        attempt: [1,2]
 
     steps: 
       - name: Checkout
@@ -47,9 +47,10 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: ${{ matrix.attempt !='4' }} #Only fails job if the final attempt fails, not the best practise as it will consume resources TODO: improve on the code so there's no issues on github run
+        continue-on-error: ${{ matrix.attempt !='2' }} #Only fails job if the final attempt fails, not the best practise as it will consume resources TODO: improve on the code so there's no issues on github run
 
       - name: Log retry attempt
-        if: failure() && matrix.attempt != '4'
+        if: failure() && matrix.attempt != '2'
         run: echo "Attempt ${{ matrix.attempt }} failed, retrying..."
+
 
