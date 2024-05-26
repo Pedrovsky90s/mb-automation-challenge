@@ -6,7 +6,7 @@ Cypress.Commands.add('fillLocationPopup', (location, postalCodePart1, postalCode
   cy.get(homePage.locationPopupModal()).within(()=> {
           cy.get('select').select(location, {force:true}) //TODO: remove force:true and make the test more robust
 
-          cy.get(homePage.postalCodeInput()).type(postalCodePart1, {force:true}) //TODO: remove force:true and make the test more robust
+          cy.get(homePage.postalCodeInput(),{force:true}).type(postalCodePart1) //TODO: remove force:true and make the test more robust
           cy.get(homePage.postalInputValidationError())
               .should('be.visible')
               .and('have.text',' Please enter a valid Postal Code. ')
