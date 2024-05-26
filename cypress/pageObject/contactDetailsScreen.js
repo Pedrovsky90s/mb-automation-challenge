@@ -52,7 +52,7 @@ class ContactDetailsScreen {
             cy.get(this.phoneNrField()).type(details.wrongPhone)
             cy.get(this.postalCodeField()).type(details.zip)
             cy.get(this.commentField()).type(details.comment)
-            cy.get(this.checkboxes()).first().click({force:true})
+            cy.get(this.checkboxes()).first().click({force:true}) //TODO: remove force:true and make the test more robust
             cy.get(this.submitButton()).click()
         }
 
