@@ -12,31 +12,31 @@ Cypress.Commands.add('fillLocationPopup', (location, postalCodePart1, postalCode
               .and('have.text',' Please enter a valid Postal Code. ')
               .then(($error)=> {
                   if (!$error.is(':visible'))  {
-                      throw new Error ('Field input validation is not visible!')
+                      throw new Error ('Field input validation is not visible!') //Throws an error in case the input validation is not visible
                   }
               });
           cy.get(homePage.postalCodeInput()).type(postalCodePart2)
 
-          cy.get(homePage.radioPurposePrivate(type)).check(force:true})
+          cy.get(homePage.radioPurposePrivate(type)).check({force:true})
           cy.get(homePage.locationPopupModalContinueButton()).click({force: true}) //TODO: remove force:true and make the test more robust
     })
   })
 
 Cypress.Commands.add('saveCarInfo', () => {
-   const carDetails = {}
-              cy.get('[data-test-id="dcp-vehicle-details-list-item-3"]').should('contain', 'Model Year ')
-              cy.get('[data-test-id="dcp-vehicle-details-list-item-3"] .dcp-vehicle-details-list-item__value')
+   const carDetails = {} //Creates a constant variable that houses an empty object to contain carDetails Model year and Vin
+              cy.get('[data-test-id="dcp-vehicle-details-list-item-3"]').should('contain', 'Model Year ') //Gets element and validates it has Text "Model Year"
+              cy.get('[data-test-id="dcp-vehicle-details-list-item-3"] .dcp-vehicle-details-list-item__value') //drills into the child element that has the year text
                       .invoke('text')
                       .then((year) => {
-                          carDetails.year = year.trim()
+                          carDetails.year = year.trim() //removes whitespaces and adds to carDetails
 
-                          cy.get('[data-test-id="dcp-vehicle-details-list-item-11"]').should('contain', 'VIN ')
+                          cy.get('[data-test-id="dcp-vehicle-details-list-item-11"]').should('contain', 'VIN ') //Gets element and validates Text is "VIN"
                           cy.get('[data-test-id="dcp-vehicle-details-list-item-11"] .dcp-vehicle-details-list-item__value')
                                               .invoke('text')
                                               .then((vin) => {
-                                                  carDetails.vin = vin.trim()
+                                                  carDetails.vin = vin.trim() //removes whitespaces and adds to the carDetails
 
-                                                  cy.writeFile('cypress/fixtures/carDetails.json', carDetails).then(()=>{
+                                                  cy.writeFile('cypress/fixtures/carDetails.json', carDetails).then(()=>{ //Creates or Updates carDetails.Json with carDetails info inside
                                                       cy.log('File written successfully')
                                                   })
                                               })
