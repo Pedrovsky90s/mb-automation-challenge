@@ -2,7 +2,7 @@ class FiltersPage {
 
     selectPreOwned() {
          cy.get('wb-tab-bar.hydrated').within(()=> {
-                cy.get('button')
+                cy.get('button', {timout: 10000})
                     .contains(" Pre-Owned")
                     .should('be.visible')
                     .click()
