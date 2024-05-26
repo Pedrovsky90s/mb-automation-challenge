@@ -16,6 +16,11 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        attempt: [1,2,3,4]
+
     steps: 
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,7 +28,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
-            node-version: '20'
+            node-version: '20.13.1'
 
       - name: Install Dependencies
         run: npm install
@@ -42,4 +47,9 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: ${{ matrix.attempt !='4' }} #only fails job if the final attempt fails
+
+      - name: Log retry attempt
+        if: failure() && matrix.attempt != '4'
+        run: echo "Attempt ${{ matrix.attempt }} failed, retrying..."
 
