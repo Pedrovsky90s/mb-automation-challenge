@@ -21,13 +21,13 @@ jobs:
             node-version: '20'
 
       - name: Install Dependencies
-        uses: npm install
+        run: npm install
 
       - name: Start app
-        uses: npm start &
+        run: npm start &
 
       - name: Wait for app to be ready
-        uses: npx wait-on http://localhost:3000
+        run: npx wait-on http://localhost:3000
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
