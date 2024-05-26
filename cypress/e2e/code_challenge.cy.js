@@ -6,7 +6,7 @@ const contactDetailsScreen= require('../pageObject/contactDetailsScreen')
 describe('Validate the negative path of enquiring the highest price at Mercedes-Benz', () => {
 
   beforeEach(() => {
-  Cypress.on('uncaught:exception', (err, runnable) => {return false}) //Turn off uncaught exceptions that will fail the running tests due to application handling missing something
+   Cypress.on('uncaught:exception', (err, runnable) => {return false}) //Turn off uncaught exceptions that will fail the running tests due to application handling missing something
    cy.visitWithRetry('/demo') // Visits the demo page, if status code or network fails, it repeats
    homePage.waitScreenLoaderDisappear(20000) //Wait for the screen loader to disappear from screen
    homePage.acceptAllCookieBanner().click({force: true}) //Accepts all cookies to continue
